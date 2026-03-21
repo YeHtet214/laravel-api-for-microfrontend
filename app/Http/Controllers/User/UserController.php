@@ -42,7 +42,7 @@ class UserController extends Controller
 
         return response()->json([
             'message' => 'Users retrieved successfully',
-            'users' => UserResource::collection($users)->response()->getData(true),
+            'data' => UserResource::collection($users)->response()->getData(true),
         ]);
     }
 

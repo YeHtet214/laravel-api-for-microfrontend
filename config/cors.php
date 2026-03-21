@@ -20,8 +20,8 @@ return [
     'allowed_methods' => ['*'],
 
     'allowed_origins' => [
-        'http://auth.laravelapi.test:5173',
-        'http://user.laravelapi.test:5174',
+        'http://auth.laravel-api-for-microfrontend.test:5173',
+        'http://user.laravel-api-for-microfrontend.test:5174',
     ],
 
     'allowed_origins_patterns' => [],
