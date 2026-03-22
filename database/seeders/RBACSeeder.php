@@ -39,6 +39,18 @@ class RBACSeeder extends Seeder
             ['name' => 'Create Product', 'slug' => 'products.create'],
             ['name' => 'Update Product', 'slug' => 'products.update'],
             ['name' => 'Delete Product', 'slug' => 'products.delete'],
+
+            // Category management
+            ['name' => 'View Categories', 'slug' => 'categories.view'],
+            ['name' => 'Create Category', 'slug' => 'categories.create'],
+            ['name' => 'Update Category', 'slug' => 'categories.update'],
+            ['name' => 'Delete Category', 'slug' => 'categories.delete'],
+
+            // Variant management
+            ['name' => 'View Variants', 'slug' => 'variants.view'],
+            ['name' => 'Create Variant', 'slug' => 'variants.create'],
+            ['name' => 'Update Variant', 'slug' => 'variants.update'],
+            ['name' => 'Delete Variant', 'slug' => 'variants.delete'],
             
             // Inventory management
             ['name' => 'View Inventory', 'slug' => 'inventory.view'],
@@ -69,6 +81,15 @@ class RBACSeeder extends Seeder
             'products.view',
             'products.create',
             'products.update',
+            'products.delete',
+            'categories.view',
+            'categories.create',
+            'categories.update',
+            'categories.delete',
+            'variants.view',
+            'variants.create',
+            'variants.update',
+            'variants.delete',
         ])->get();
         $productManagerRole->permissions()->sync($productManagerPermissions->pluck('id'));
 
