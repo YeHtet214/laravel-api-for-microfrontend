@@ -22,6 +22,7 @@ return [
     'allowed_origins' => [
         'http://auth.laravel-api-for-microfrontend.test:5173',
         'http://user.laravel-api-for-microfrontend.test:5174',
+        'http://product.laravel-api-for-microfrontend.test:5175',
     ],
 
     'allowed_origins_patterns' => [],
