@@ -20,12 +20,22 @@ beforeEach(function () {
 });
 
 test('user with products.view can list products', function () {
-    Product::factory()->count(3)->create();
+    $product = Product::factory()->create();
+    \App\Models\ProductVariant::factory()->create(['product_id' => $product->id]);
 
     $response = $this->actingAs($this->user)
         ->getJson('/api/products');
 
-    $response->assertStatus(200);
+    $response->assertStatus(200)
+        ->assertJsonStructure([
+            'data' => [
+                '*' => [
+                    'id', 'name', 'variants' => [
+                        '*' => ['id', 'sku']
+                    ]
+                ]
+            ]
+        ]);
 });
 
 test('user with products.create can create product', function () {
