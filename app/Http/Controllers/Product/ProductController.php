@@ -23,7 +23,7 @@ class ProductController extends Controller
             'per_page' => ['nullable', 'integer', 'min:1', 'max:100'],
         ]);
 
-        $query = Product::with('category');
+        $query = Product::with(['category', 'variants.attributes']);
 
         if ($request->filled('search')) {
             $search = $request->search;
