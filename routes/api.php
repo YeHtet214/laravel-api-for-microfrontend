@@ -71,6 +71,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::get('/{order}', [OrderController::class, 'show'])->middleware('permission:orders.view');
         Route::post('/', [OrderController::class, 'store'])->middleware('permission:orders.create');
         Route::put('/{order}', [OrderController::class, 'update'])->middleware('permission:orders.update');
-        Route::patch('/{order}/status', [OrderController::class, 'updateStatus'])->middleware('permission:orders.status.update');
+        Route::patch('/{order}/status', [OrderController::class, 'updateStatus'])->middleware('permission:orders.update');
     });
 });

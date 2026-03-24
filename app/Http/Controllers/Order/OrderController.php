@@ -87,9 +87,10 @@ class OrderController extends Controller
             $order = $this->orderService->updateStatus($order, $request->status);
             return new OrderResource($order->load(['items', 'creator']));
         } catch (\InvalidArgumentException $e) {
-            return response()->json([
-                'message' => $e->getMessage()
-            ], 422);
+            return new OrderResource($order->load(['items', 'quantity']));
+            // return response()->json([
+            //     'message' => $e->getMessage()
+            // ], 422);
         }
     }
 }
