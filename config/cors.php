@@ -23,6 +23,7 @@ return [
         'http://auth.laravel-api-for-microfrontend.test:5173',
         'http://user.laravel-api-for-microfrontend.test:5174',
         'http://product.laravel-api-for-microfrontend.test:5175',
+        'http://order.laravel-api-for-microfrontend.test:5176',
     ],
 
     'allowed_origins_patterns' => [],
