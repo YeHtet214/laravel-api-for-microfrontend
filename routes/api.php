@@ -7,6 +7,7 @@ use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\Product\CategoryController;
 use App\Http\Controllers\Product\ProductController;
 use App\Http\Controllers\Product\ProductVariantController;
+use App\Http\Controllers\Order\OrderController;
 use Illuminate\Support\Facades\Route;
 
 // Auth routes
@@ -62,5 +63,14 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::post('/', [ProductVariantController::class, 'store'])->middleware('permission:variants.create');
         Route::put('/{variant}', [ProductVariantController::class, 'update'])->middleware('permission:variants.update');
         Route::delete('/{variant}', [ProductVariantController::class, 'destroy'])->middleware('permission:variants.delete');
+    });
+
+    // Ordering System Routes
+    Route::prefix('orders')->group(function () {
+        Route::get('/', [OrderController::class, 'index'])->middleware('permission:orders.view');
+        Route::get('/{order}', [OrderController::class, 'show'])->middleware('permission:orders.view');
+        Route::post('/', [OrderController::class, 'store'])->middleware('permission:orders.create');
+        Route::put('/{order}', [OrderController::class, 'update'])->middleware('permission:orders.update');
+        Route::patch('/{order}/status', [OrderController::class, 'updateStatus'])->middleware('permission:orders.status.update');
     });
 });
