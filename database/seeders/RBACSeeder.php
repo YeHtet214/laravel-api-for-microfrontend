@@ -56,6 +56,12 @@ class RBACSeeder extends Seeder
             ['name' => 'View Inventory', 'slug' => 'inventory.view'],
             ['name' => 'Stock In', 'slug' => 'inventory.stock_in'],
             ['name' => 'Stock Out', 'slug' => 'inventory.stock_out'],
+
+            // Order management
+            ['name' => 'View Orders', 'slug' => 'orders.view'],
+            ['name' => 'Create Order', 'slug' => 'orders.create'],
+            ['name' => 'Update Order', 'slug' => 'orders.update'],
+            ['name' => 'Delete Order', 'slug' => 'orders.delete'],
         ];
 
         foreach ($permissions as $permission) {
