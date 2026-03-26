@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\Auth\SsoController;
 use App\Http\Controllers\Permission\PermissionController;
 use App\Http\Controllers\Role\RoleController;
 use App\Http\Controllers\User\UserController;
@@ -9,6 +10,9 @@ use App\Http\Controllers\Product\ProductController;
 use App\Http\Controllers\Product\ProductVariantController;
 use App\Http\Controllers\Order\OrderController;
 use Illuminate\Support\Facades\Route;
+
+// SSO routes
+Route::post('/sso/token', [SsoController::class, 'token']);
 
 // Auth routes
 Route::middleware('auth:sanctum')->group(function () {

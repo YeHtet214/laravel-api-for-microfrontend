@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\SsoController;
 use Illuminate\Http\Request as Request;
 use Illuminate\Support\Facades\Route;
 
@@ -17,3 +18,4 @@ Route::get('/', function () {
 
 Route::middleware('guest')->post('/login', [LoginController::class, '__invoke']);
 Route::middleware('auth')->post('/logout', [AuthController::class, 'logout']);
+Route::get('/sso/authorize', [SsoController::class, 'authorize']);
