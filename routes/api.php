@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\SsoController;
 use App\Http\Controllers\Permission\PermissionController;
 use App\Http\Controllers\Role\RoleController;
@@ -9,10 +10,42 @@ use App\Http\Controllers\Product\CategoryController;
 use App\Http\Controllers\Product\ProductController;
 use App\Http\Controllers\Product\ProductVariantController;
 use App\Http\Controllers\Order\OrderController;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+
+Route::post('/login', [LoginController::class, '__invoke']);
+
+Route::middleware('auth:sanctum')->get('/debug-token', function (Request $request) {
+    return response()->json([
+        'user' => $request->user()->email,
+        'tokens' => $request->user()->tokens->map(fn($t) => ['id' => $t->id, 'name' => $t->name, 'abilities' => $t->abilities]),
+    ]);
+});
+
+Route::get('/test-user', function () {
+    $user = \App\Models\User::where('email', 'admin@test.com')->first();
+    if (!$user) {
+        return response()->json(['message' => 'User not found', 'count' => \App\Models\User::count()]);
+    }
+    return response()->json([
+        'found' => true,
+        'email' => $user->email,
+        'status' => $user->status,
+        'password_hash' => $user->password,
+    ]);
+});
+
+Route::get('/test-client', function () {
+    $clients = \App\Models\SsoClient::all();
+    return response()->json([
+        'count' => $clients->count(),
+        'clients' => $clients->map(fn($c) => ['id' => $c->id, 'client_id' => $c->client_id, 'is_active' => $c->is_active]),
+    ]);
+});
 
 // SSO routes
 Route::post('/sso/token', [SsoController::class, 'token']);
+Route::middleware('auth:sanctum')->post('/sso/create-token', [SsoController::class, 'createToken']);
 
 // Auth routes
 Route::middleware('auth:sanctum')->group(function () {

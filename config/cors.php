@@ -20,10 +20,12 @@ return [
     'allowed_methods' => ['*'],
 
     'allowed_origins' => [
-        'http://auth.laravel-api-for-microfrontend.test:5173',
-        'http://user.laravel-api-for-microfrontend.test:5174',
-        'http://product.laravel-api-for-microfrontend.test:5175',
-        'http://order.laravel-api-for-microfrontend.test:5176',
+        'http://auth.mfe-server.test:5173',
+        'http://user.mfe-server.test:5174',
+        'http://product.mfe-server.test:5175',
+        'http://order.mfe-server.test:5176',
+        'http://mfe-sso-auth.test',
+        'http://mfe-server.test',
     ],
 
     'allowed_origins_patterns' => [],

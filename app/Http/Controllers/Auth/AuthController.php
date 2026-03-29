@@ -44,18 +44,7 @@ class AuthController extends Controller
 
     public function logout(Request $request)
     {
-        if ($token = $request->user()?->currentAccessToken()) {
-            $token->delete();
-        }
-
-        if (Auth::guard('web')->check()) {
-            Auth::guard('web')->logout();
-        }
-
-        if ($request->hasSession()) {
-            $request->session()->invalidate();
-            $request->session()->regenerateToken();
-        }
+        $request->user()?->tokens()->delete();
 
         return response()->json([
             'message' => 'Logged out successfully.',

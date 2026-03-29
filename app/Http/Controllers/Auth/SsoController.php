@@ -10,6 +10,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 class SsoController extends Controller
@@ -127,6 +128,43 @@ class SsoController extends Controller
                 'email' => $code->user->email,
                 'status' => $code->user->status,
             ],
+        ]);
+    }
+
+    public function createToken(Request $request): JsonResponse
+    {
+        Log::info('createToken called', [
+            'inputs' => $request->all(),
+            'auth_user' => $request->user()?->email,
+        ]);
+
+        $user = $request->user();
+
+        if (! $user) {
+            return response()->json(['message' => 'Unauthenticated.'], 401);
+        }
+
+        if ($user->status !== 'active') {
+            return response()->json(['message' => 'Your account is inactive.'], 403);
+        }
+
+        $clientId = $request->input('client_id', 'default');
+        $redirectUri = $request->input('redirect_uri', 'http://localhost');
+
+        $expiration = config('sanctum.expiration');
+        $expiresAt = $expiration ? now()->addMinutes((int) $expiration) : null;
+
+        $token = $user->createToken(
+            name: 'sso:'.$clientId,
+            abilities: ['*'],
+            expiresAt: $expiresAt,
+        );
+
+        return response()->json([
+            'token_type' => 'Bearer',
+            'access_token' => $token->plainTextToken,
+            'expires_at' => $expiresAt?->toIso8601String(),
+            'redirect_uri' => $redirectUri,
         ]);
     }
 }
