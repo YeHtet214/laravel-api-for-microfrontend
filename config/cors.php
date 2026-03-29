@@ -26,6 +26,10 @@ return [
         'http://order.mfe-server.test:5176',
         'http://mfe-sso-auth.test',
         'http://mfe-server.test',
+        'https://mfe-sso-auth-c10l7saqt-yair-htets-projects-34928918.vercel.app/',
+        'https://mfe-product-management.vercel.app/',
+        'https://mfe-user-management-portal-app.vercel.app/',
+        'https://mfe-order-management.vercel.app/'
     ],
 
     'allowed_origins_patterns' => [],
