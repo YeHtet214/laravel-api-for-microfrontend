@@ -1,11 +1,11 @@
 # Frontend API Integration Guide
 
-This document provides the exact API contracts for the Portal frontend integration. The backend is a Laravel API using session-based authentication (Laravel Sanctum).
+This document provides the exact API contracts for the Portal frontend integration. The backend is a Laravel API using hybrid SSO authentication (central session + Sanctum token exchange).
 
 ## 1. Global Conventions
 
 - **Base URL**: `/api`
-- **Auth Strategy**: Session-based (Sanctum).
+- **Auth Strategy**: Hybrid SSO (central session + Sanctum bearer token exchange).
 - **Headers**:
   - `Accept: application/json`
   - `Content-Type: application/json`
@@ -64,6 +64,17 @@ List endpoints use standard Laravel pagination:
 ```
 
 ---
+
+
+### SSO Endpoints
+- **GET `/sso/authorize`** (browser redirect endpoint)
+  - Query: `client_id`, `redirect_uri`, optional `state`
+  - Behavior:
+    - If central auth session exists: redirects back to `redirect_uri` with one-time `code`
+    - If no session: returns `401` with `{ message: "Unauthenticated." }`
+- **POST `/api/sso/token`**
+  - Payload: `grant_type=authorization_code`, `client_id`, `client_secret`, `code`, `redirect_uri`
+  - Returns Sanctum bearer token for API calls
 
 ## 3. User Management
 
