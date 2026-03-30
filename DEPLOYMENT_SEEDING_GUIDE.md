@@ -170,12 +170,17 @@ Database file at path [/var/www/html/database/database.sqlite] does not exist
 
 **Cause**: SQLite database file doesn't exist in production
 
-**Solution**: The setup script now automatically creates the SQLite database file:
+**Solution**: Multiple layers of protection have been added:
+
+1. **Setup Script** (build time):
 ```json
 "@php -r \"file_exists(database_path('database.sqlite')) || touch(database_path('database.sqlite'));\""
 ```
 
-This line creates the database file if it doesn't exist before running migrations.
+2. **AppServiceProvider** (runtime):
+The [`AppServiceProvider`](app/Providers/AppServiceProvider.php:20) now automatically creates the SQLite database file if it doesn't exist when the application boots.
+
+This ensures the database file exists even if the setup script doesn't run on Laravel Cloud.
 
 **Manual Fix** (if needed):
 ```bash
