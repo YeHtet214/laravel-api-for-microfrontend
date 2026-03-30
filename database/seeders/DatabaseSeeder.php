@@ -33,6 +33,11 @@ class DatabaseSeeder extends Seeder
                 'http://user.mfe-server.test:5174',
                 'http://product.mfe-server.test:5175',
                 'http://order.mfe-server.test:5176',
+                // Production Vercel URLs
+                'https://mfe-sso-auth.vercel.app',
+                'https://mfe-user-management-portal-app.vercel.app',
+                'https://mfe-product-management.vercel.app',
+                'https://mfe-order-management.vercel.app',
             ],
             'is_active' => true,
         ]);
