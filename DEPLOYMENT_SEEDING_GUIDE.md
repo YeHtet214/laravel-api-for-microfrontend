@@ -15,6 +15,7 @@ When you deploy to Laravel Cloud, the `setup` script in [`composer.json`](compos
     "composer install",
     "@php -r \"file_exists('.env') || copy('.env.example', '.env');\"",
     "@php artisan key:generate",
+    "@php -r \"file_exists(database_path('database.sqlite')) || touch(database_path('database.sqlite'));\"",
     "@php artisan migrate --force",
     "@php artisan db:seed --force",
     "npm install",
@@ -22,10 +23,15 @@ When you deploy to Laravel Cloud, the `setup` script in [`composer.json`](compos
 ]
 ```
 
-The key addition is `@php artisan db:seed --force` which:
-1. Runs after migrations complete
-2. Uses `--force` flag to run in production
-3. Executes the [`DatabaseSeeder`](database/seeders/DatabaseSeeder.php:10)
+The setup script:
+1. Installs Composer dependencies
+2. Creates `.env` file if it doesn't exist
+3. Generates application key
+4. **Creates SQLite database file if it doesn't exist** ← Critical for production
+5. Runs migrations
+6. **Seeds demo data** ← Demo data is created here
+7. Installs NPM dependencies
+8. Builds frontend assets
 
 ### What Gets Seeded
 
@@ -154,6 +160,37 @@ php artisan tinker --execute="echo App\Models\Role::count();"
 ```
 
 ## Troubleshooting
+
+### SQLite Database File Not Found
+
+**Symptoms**: `500 Internal Server Error` with message:
+```
+Database file at path [/var/www/html/database/database.sqlite] does not exist
+```
+
+**Cause**: SQLite database file doesn't exist in production
+
+**Solution**: The setup script now automatically creates the SQLite database file:
+```json
+"@php -r \"file_exists(database_path('database.sqlite')) || touch(database_path('database.sqlite'));\""
+```
+
+This line creates the database file if it doesn't exist before running migrations.
+
+**Manual Fix** (if needed):
+```bash
+# SSH into Laravel Cloud
+laravel-cloud ssh
+
+# Create database file
+touch database/database.sqlite
+
+# Run migrations
+php artisan migrate --force
+
+# Run seeders
+php artisan db:seed --force
+```
 
 ### Seeding Fails During Deployment
 
