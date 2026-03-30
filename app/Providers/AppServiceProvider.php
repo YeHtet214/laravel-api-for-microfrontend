@@ -4,6 +4,8 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\Artisan;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -20,7 +22,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        // Ensure SQLite database file exists in production
+        // Ensure SQLite database file exists and migrations run in production
         if (config('database.default') === 'sqlite') {
             $databasePath = config('database.connections.sqlite.database');
             
@@ -33,6 +35,17 @@ class AppServiceProvider extends ServiceProvider
                 
                 // Create empty database file
                 File::put($databasePath, '');
+            }
+            
+            // Run migrations if database is empty (no tables exist)
+            if (!Schema::hasTable('users')) {
+                try {
+                    Artisan::call('migrate', ['--force' => true]);
+                    Artisan::call('db:seed', ['--force' => true]);
+                } catch (\Exception $e) {
+                    // Log error but don't break the application
+                    logger()->error('Failed to run migrations/seeds: ' . $e->getMessage());
+                }
             }
         }
     }

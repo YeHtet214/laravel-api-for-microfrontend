@@ -178,9 +178,12 @@ Database file at path [/var/www/html/database/database.sqlite] does not exist
 ```
 
 2. **AppServiceProvider** (runtime):
-The [`AppServiceProvider`](app/Providers/AppServiceProvider.php:20) now automatically creates the SQLite database file if it doesn't exist when the application boots.
+The [`AppServiceProvider`](app/Providers/AppServiceProvider.php:20) now automatically:
+   - Creates the SQLite database file if it doesn't exist
+   - Runs migrations if the database is empty
+   - Seeds demo data if migrations just ran
 
-This ensures the database file exists even if the setup script doesn't run on Laravel Cloud.
+This ensures the database file exists and is populated even if the setup script doesn't run on Laravel Cloud.
 
 **Manual Fix** (if needed):
 ```bash
@@ -196,6 +199,23 @@ php artisan migrate --force
 # Run seeders
 php artisan db:seed --force
 ```
+
+### No Such Table Error
+
+**Symptoms**: `500 Internal Server Error` with message:
+```
+SQLSTATE[HY000]: General error: 1 no such table: users
+```
+
+**Cause**: Database file exists but migrations haven't run
+
+**Solution**: The [`AppServiceProvider`](app/Providers/AppServiceProvider.php:20) now automatically runs migrations and seeding if the database is empty.
+
+The application will:
+1. Check if the `users` table exists
+2. If not, run migrations automatically
+3. Seed demo data automatically
+4. Log any errors without breaking the application
 
 ### Seeding Fails During Deployment
 
